@@ -34,11 +34,7 @@ def save_scheckpoint(filename, state):
 
 def load_checkpoint(filename):
     print("=> loading checkpoint '{}'".format(filename + '.pth'))
-    try:
-        state = torch.load(filename)
-    except RuntimeError:
-        # load on CPU
-        state = torch.load(filename, map_location=torch.device('cpu'))
+    state = torch.load(filename, map_location=torch.device('cpu'))
     return state
 
 def parameterized_truncated_normal(uniform, mu, sigma, a, b):
