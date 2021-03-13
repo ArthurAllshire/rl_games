@@ -10,6 +10,7 @@ import collections
 import time
 from collections import deque, OrderedDict
 import gym
+import os
 
 from datetime import datetime
 from tensorboardX import SummaryWriter
@@ -41,6 +42,11 @@ class A2CBase:
         self.env_config = config.get('env_config', {})
         self.num_actors = config['num_actors']
         self.env_name = config['env_name']
+
+        # allows saving of checkpoints to a fixed location, making restore possible on cluster
+        if 'preemption_checkpoint_dir' in self.config:
+            self.preemption_checkpoint_path = os.path.join(self.config['preemption_checkpoint_dir'], self.config['name'])
+            self.preemption_save_freq = self.config['preemption_save_freq']
 
         self.env_info = config.get('env_info')
         if self.env_info is None:
@@ -850,6 +856,9 @@ class DiscreteA2CBase(A2CBase):
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
 
+                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_save_freq) == 0:
+                        self.save(self.preemption_checkpoint_path)
+
                     if self.save_freq > 0:
                         if (epoch_num % self.save_freq == 0) and (mean_rewards <= self.last_mean_rewards):
                             self.save("./nn/" + 'last_' + self.config['name'] + 'ep=' + str(epoch_num) + 'rew=' + str(mean_rewards))
@@ -1077,6 +1086,9 @@ class ContinuousA2CBase(A2CBase):
 
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
+
+                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_save_freq) == 0:
+                            self.save(self.preemption_checkpoint_path)
 
                     if self.save_freq > 0:
                         if (epoch_num % self.save_freq == 0) and (mean_rewards <= self.last_mean_rewards):
