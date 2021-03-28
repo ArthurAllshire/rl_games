@@ -46,7 +46,7 @@ class A2CBase:
         # allows saving of checkpoints to a fixed location, making restore possible on cluster
         if 'preemption_checkpoint_dir' in self.config:
             self.preemption_checkpoint_path = os.path.join(self.config['preemption_checkpoint_dir'], self.config['name'])
-            self.preemption_save_freq = self.config['preemption_save_freq']
+            self.preemption_checkpoint_freq = self.config['preemption_checkpoint_freq']
 
         self.env_info = config.get('env_info')
         if self.env_info is None:
@@ -856,7 +856,7 @@ class DiscreteA2CBase(A2CBase):
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
 
-                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_save_freq) == 0:
+                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
                         self.save(self.preemption_checkpoint_path)
 
                     if self.save_freq > 0:
@@ -1087,7 +1087,7 @@ class ContinuousA2CBase(A2CBase):
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
 
-                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_save_freq) == 0:
+                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
                             self.save(self.preemption_checkpoint_path)
 
                     if self.save_freq > 0:
