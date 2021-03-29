@@ -831,6 +831,7 @@ class DiscreteA2CBase(A2CBase):
                     fps_total = self.batch_size / scaled_time
                     print(f'fps step: {fps_step:.1f} fps total: {fps_total:.1f}')
 
+                self.writer.add_scalar('frame', frame, frame)
                 self.writer.add_scalar('performance/total_fps', self.batch_size / scaled_time, frame)
                 self.writer.add_scalar('performance/step_fps', self.batch_size / scaled_play_time, frame)
                 self.writer.add_scalar('performance/update_time', update_time, frame)
