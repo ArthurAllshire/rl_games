@@ -47,6 +47,9 @@ class A2CBase:
         if 'preemption_checkpoint_dir' in self.config:
             self.preemption_checkpoint_path = os.path.join(self.config['preemption_checkpoint_dir'], self.config['name'])
             self.preemption_checkpoint_freq = self.config['preemption_checkpoint_freq']
+        else:
+            self.preemption_checkpoint_path = None
+            self.preemption_checkpoint_freq = None
 
         self.env_info = config.get('env_info')
         if self.env_info is None:
