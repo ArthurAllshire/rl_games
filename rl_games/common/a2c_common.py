@@ -412,7 +412,8 @@ class A2CBase:
     def get_full_state_weights(self):
         state = self.get_weights()
         state['epoch'] = self.epoch_num
-        state['optimizer'] = self.optimizer.state_dict()      
+        state['frame'] = self.frame
+        state['optimizer'] = self.optimizer.state_dict()
         if self.mixed_precision:
             state['scaler'] = self.scaler.state_dict()
         if self.has_central_value:
@@ -421,6 +422,7 @@ class A2CBase:
 
     def set_full_state_weights(self, weights):
         self.set_weights(weights)
+        self.frame = weights['frame']
         self.epoch_num = weights['epoch']
         if self.mixed_precision and 'scaler' in weights:
             self.scaler.load_state_dict(weights['scaler'])
@@ -1038,7 +1040,6 @@ class ContinuousA2CBase(A2CBase):
         start_time = time.time()
         total_time = 0
         rep_count = 0
-        self.frame = 0
         self.obs = self.env_reset()
         self.curr_frames = self.batch_size_envs
 
