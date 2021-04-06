@@ -879,7 +879,7 @@ class DiscreteA2CBase(A2CBase):
                             return self.last_mean_rewards, epoch_num
 
                 if epoch_num > self.max_epochs:
-                    self.save("./nn/" + 'last_' + self.config['name'] + 'ep=' + str(epoch_num) + 'rew=' + str(mean_rewards))
+                    self.save("./nn/" + 'last_' + self.config['name'] + 'ep=' + str(epoch_num))
                     print('MAX EPOCHS NUM!')
                     return self.last_mean_rewards, epoch_num                               
                 update_time = 0
@@ -1109,7 +1109,7 @@ class ContinuousA2CBase(A2CBase):
                             return self.last_mean_rewards, epoch_num
 
                 if epoch_num > self.max_epochs:
-                    self.save("./nn/" + 'last_' + self.config['name'] + 'ep=' + str(epoch_num) + 'rew=' + str(mean_rewards))
+                    self.save("./nn/" + 'last_' + self.config['name'] + 'ep=' + str(epoch_num))
                     print('MAX EPOCHS NUM!')
                     return self.last_mean_rewards, epoch_num
 
