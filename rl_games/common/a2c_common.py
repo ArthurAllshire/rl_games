@@ -847,6 +847,9 @@ class DiscreteA2CBase(A2CBase):
 
                 self.algo_observer.after_print_stats(frame, epoch_num, total_time)
 
+                if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
+                    self.save(self.preemption_checkpoint_path)
+
                 if self.game_rewards.current_size > 0:
                     mean_rewards = self.game_rewards.get_mean()
                     mean_lengths = self.game_lengths.get_mean()
@@ -861,9 +864,6 @@ class DiscreteA2CBase(A2CBase):
 
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
-
-                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
-                        self.save(self.preemption_checkpoint_path)
 
                     if self.save_freq > 0:
                         if (epoch_num % self.save_freq == 0) and (mean_rewards <= self.last_mean_rewards):
@@ -1076,7 +1076,10 @@ class ContinuousA2CBase(A2CBase):
                 self.writer.add_scalar('info/epochs', epoch_num, frame)
 
                 self.algo_observer.after_print_stats(frame, epoch_num, total_time)
-                
+
+                if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
+                    self.save(self.preemption_checkpoint_path)
+
                 if self.game_rewards.current_size > 0:
                     mean_rewards = self.game_rewards.get_mean()
                     mean_lengths = self.game_lengths.get_mean()
@@ -1091,9 +1094,6 @@ class ContinuousA2CBase(A2CBase):
 
                     if self.has_self_play_config:
                         self.self_play_manager.update(self)
-
-                    if self.preemption_checkpoint_path is not None and (epoch_num % self.preemption_checkpoint_freq) == 0:
-                            self.save(self.preemption_checkpoint_path)
 
                     if self.save_freq > 0:
                         if (epoch_num % self.save_freq == 0) and (mean_rewards <= self.last_mean_rewards):
